@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-eks-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jenkins-eks-demo
+  template:
+    metadata:
+      labels:
+        app: jenkins-eks-demo
+    spec:
+      containers:
+        - name: jenkins-eks-demo
+          image: 907480720480.dkr.ecr.ap-south-1.amazonaws.com/jenkins-eks-demo:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-eks-demo-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: jenkins-eks-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
